@@ -1,28 +1,26 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, { Fragment } from 'react';
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
+// import Home from './components/home';
+import Cookbook from './components/cookbook';
+import Login from './components/login';
+import Signup from './components/signup';
+import NotFound from './components/notFound';
 import './App.css';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+const App = () => {
+  return (
+    <Fragment>
+      <Switch>
+        <Route exact path='/' render={() => <Redirect to='/cookbook' />} />
+
+        {/* <Route exact path ='/home' component={Home} /> */}
+        <Route exact path ='/cookbook' component={Cookbook} />
+        <Route exact path ='/login' component={Login} />
+        <Route exact path ='/signup' component={Signup} />
+        <Route component={NotFound} />
+      </Switch>
+    </Fragment>
+  )
 }
 
-export default App;
+export default withRouter(App)
