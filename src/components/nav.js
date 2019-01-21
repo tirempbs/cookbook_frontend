@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Search from './search';
 import { logoutUser } from '../actions/user';
 import { setCookbook } from '../actions/cookbook';
+import { setRecipes } from '../actions/recipe';
 
 class Nav extends Component {
   state = { 
@@ -21,7 +22,9 @@ class Nav extends Component {
 
   handleNavClick = (e) => {
     const foundCookbook = this.props.filteredCookbooks.find(cb=>cb.title===e.target.innerText)
+    
     this.props.setCookbook(foundCookbook)
+    this.props.setRecipes()
   }
 
   renderCookbookTitles = () => {
@@ -78,7 +81,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     logoutUser: () => dispatch(logoutUser()),
-    setCookbook: (cookbookData) => dispatch(setCookbook(cookbookData))
+    setCookbook: (cookbookData) => dispatch(setCookbook(cookbookData)),
+    setRecipes: (recipeData) => dispatch(setRecipes(recipeData))
   }
 } 
 

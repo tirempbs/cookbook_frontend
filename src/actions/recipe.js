@@ -15,3 +15,8 @@ export const getRecipes = (recipeData) => ({
   type: 'GET_RECIPES',
   payload: recipeData
 })
+
+export const setRecipes = (recipeData) => ({
+  type: 'SET_RECIPES',
+  payload: recipeData
+})

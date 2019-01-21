@@ -18,25 +18,40 @@ class Cookbook extends Component {
     return this.props.cookbooks.filter(cb=>cb.user_id === this.props.user.id)
   }
 
+  filterRecipes = () => {
+    if (this.props.selectedCookbook.cookbook_recipes) {
+      const recipe_ids = this.props.selectedCookbook.cookbook_recipes.map(r => r.recipe_id)
+      return this.props.recipes.filter(r => recipe_ids.indexOf(r.id) >= 0)
+    }
+  }
 
+  renderRecipeCards = () => {
+    const filteredRecipes = this.filterRecipes()
 
+    if (filteredRecipes) {
+      return filteredRecipes.map(r => 
+        <Grid.Column key={r.id}>
+          <Card>
+            <Image src={r.image_url} />
+            <Card.Content>
+              <Card.Header>{r.title}</Card.Header>
+            </Card.Content>
+          </Card>
+        </Grid.Column>
+      )
+    }
+  }  
+  
   render() {
     const filteredCookbooks = this.filterCookbooks()
-    console.log(this.props)
+    
     return (
       <div>
         <Nav filteredCookbooks={filteredCookbooks}/>
         <Container>
           <Header as='h1'>{this.props.selectedCookbook.title}</Header>
           <Grid columns={4}>
-            <Grid.Column>
-              <Card>
-                <Image src='/images/avatar/large/matthew.png' />
-                <Card.Content>
-                  <Card.Header>Card Header</Card.Header>
-                </Card.Content>
-              </Card>
-            </Grid.Column>
+            {this.renderRecipeCards()}
           </Grid>
         </Container>
       </div>
@@ -49,7 +64,8 @@ const mapStateToProps = (state) => {
     user: state.usersReducer.user,
     cookbooks: state.cookbooksReducer.cookbooks,
     selectedCookbook: state.cookbooksReducer.selectedCookbook,
-    recipes: state.recipesReducer.recipes
+    recipes: state.recipesReducer.recipes,
+    selectedRecipes: state.recipesReducer.selectedRecipes
   }
 }
 
