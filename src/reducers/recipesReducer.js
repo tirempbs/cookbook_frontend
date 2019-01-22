@@ -1,6 +1,6 @@
 const defaultState = {
   recipes: [],
-  selectedRecipes: null
+  selectedRecipes: []
 }
 
 const recipesReducer = (state = defaultState, action) => {

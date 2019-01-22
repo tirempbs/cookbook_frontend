@@ -40,7 +40,7 @@ class Login extends Component {
               error={this.props.failedLogin}
             >
               <Message error header={this.props.failedLogin ? this.props.error : null} />
-              <Segment stacked>
+              <Segment>
                 <Form.Input 
                   fluid 
                   icon='user' 

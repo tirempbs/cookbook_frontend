@@ -1,89 +1,90 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Menu, Button, Dropdown } from 'semantic-ui-react';
-import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Search from './search';
-import { logoutUser } from '../actions/user';
-import { setCookbook } from '../actions/cookbook';
-import { setRecipes } from '../actions/recipe';
+import withAuth from '../hocs/withAuth';
+import { fetchCookbooks, setCookbook } from '../actions/cookbook';
+import { logoutUser, fetchCurrentUser } from '../actions/user';
+import { fetchRecipes } from '../actions/recipe';
 
-class Nav extends Component {
-  state = { 
-    activeItem: ''
- }
+class Nav extends React.Component {
+  componentDidMount() {
+    this.props.fetchCookbooks()
+    this.props.fetchCurrentUser()
+    this.props.fetchRecipes()
+  }
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+  filterCookbooks = () => {
+    return this.props.cookbooks.filter(cb=>cb.user_id === this.props.user.id)
+  }
 
-  handleLogoutSubmit = () => {
+  handleSelectCookbook = event => {
+    const foundCookbook = this.props.cookbooks.find(cb=>cb.title===event.target.innerText)
+    this.props.setCookbook(foundCookbook)
+  }
+
+  renderDropdownItems = () => {
+    const filteredCookbooks = this.filterCookbooks()
+
+    return filteredCookbooks.map(cb =>
+      <Dropdown.Item key={cb.id} onClick={this.handleSelectCookbook}>
+      <Link to='/cookbook'>
+      {cb.title}
+      </Link>
+      </Dropdown.Item>
+    )
+  }
+
+  handleLogout = () => {
     localStorage.clear()
     this.props.logoutUser()
     window.location.reload()
   }
 
-  handleNavClick = (e) => {
-    const foundCookbook = this.props.filteredCookbooks.find(cb=>cb.title===e.target.innerText)
-    
-    this.props.setCookbook(foundCookbook)
-    this.props.setRecipes()
-  }
-
-  renderCookbookTitles = () => {
-    return this.props.filteredCookbooks.map(cookbook => 
-    <Dropdown.Item onClick={this.handleNavClick} key={cookbook.id}>{cookbook.title}</Dropdown.Item>
-    )
-  }
-
   render() {
-    const { activeItem } = this.state
-   
     return (
-      <Menu pointing secondary>
-        <Menu.Item
-          header
-          name='home'
-          text='Home'
-          active={activeItem === 'home'}
-          onClick={this.handleItemClick}
-        >
-        </Menu.Item>
+      <>
+        <Menu size='large'>
+          <Dropdown item text='Cookbooks'>
+            <Dropdown.Menu>
+              {this.renderDropdownItems()}
+            </Dropdown.Menu>
+          </Dropdown>
 
-        <Dropdown 
-          item
-          name='cookbooks' 
-          text='Cookbooks'  
-          onClick={this.handleItemClick}
-        >
-          <Dropdown.Menu>
-            {this.renderCookbookTitles()}
-          </Dropdown.Menu>
-        </Dropdown>
+          <Menu.Item name='search'>
+            <Link to='/search'>
+            Search
+            </Link>
+          </Menu.Item>
 
-        <Menu.Menu position='right'>
-          <Menu.Item >
-            <Search />
-          </Menu.Item>
-          
-          <Menu.Item>
-            <Button primary onClick={this.handleLogoutSubmit}>Logout</Button>
-          </Menu.Item>
-        </Menu.Menu>
-      </Menu>
+          <Menu.Menu position='right'>
+            <Menu.Item>
+              <Button color='blue' onClick={this.handleLogout}>Logout</Button>
+            </Menu.Item>
+          </Menu.Menu>
+        </Menu>
+      </>
     )
   }
-}
+
+} // end of Nav Class
+
 
 const mapStateToProps = (state) => {
   return {
-    selectedCookbook: state.cookbooksReducer.selectedCookbook
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    logoutUser: () => dispatch(logoutUser()),
-    setCookbook: (cookbookData) => dispatch(setCookbook(cookbookData)),
-    setRecipes: (recipeData) => dispatch(setRecipes(recipeData))
+    user: state.usersReducer.user,
+    cookbooks: state.cookbooksReducer.cookbooks
   }
 } 
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Nav))
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchCurrentUser: () => dispatch(fetchCurrentUser()),
+    logoutUser: () => dispatch(logoutUser()),
+    fetchCookbooks: () => dispatch(fetchCookbooks()),
+    setCookbook: (cookbookData) => dispatch(setCookbook(cookbookData)),
+    fetchRecipes: () => dispatch(fetchRecipes())
+  }
+} 
+
+export default withAuth(connect(mapStateToProps, mapDispatchToProps)(Nav))

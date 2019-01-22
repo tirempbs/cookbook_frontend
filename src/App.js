@@ -1,25 +1,27 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
-// import Home from './components/home';
-import Cookbook from './components/cookbook';
+import Nav from './components/nav';
 import Login from './components/login';
 import Signup from './components/signup';
 import NotFound from './components/notFound';
+import Search from './components/search';
+import Cookbook from './components/cookbook';
 import './App.css';
 
-const App = () => {
+function App() {
   return (
-    <Fragment>
+    <>
+      <Nav />
       <Switch>
         <Route exact path='/' render={() => <Redirect to='/cookbook' />} />
 
-        {/* <Route exact path ='/home' component={Home} /> */}
-        <Route exact path ='/cookbook' component={Cookbook} />
-        <Route exact path ='/login' component={Login} />
-        <Route exact path ='/signup' component={Signup} />
+        <Route exact path='/cookbook' component={Cookbook} />
+        <Route exact path='/search' component={Search} />
+        <Route exact path='/login' component={Login} />
+        <Route exact path='/signup' component={Signup} />
         <Route component={NotFound} />
       </Switch>
-    </Fragment>
+    </>
   )
 }
 
