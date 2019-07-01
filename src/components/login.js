@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Redirect } from 'react-router-dom';
 import { loginUser } from '../actions/user';
-import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Message, Segment, Icon } from 'semantic-ui-react';
 
 class Login extends Component {
   state = { username: '', password: '' }
@@ -30,8 +30,8 @@ class Login extends Component {
       `}</style>
         <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
           <Grid.Column style={{ maxWidth: 450 }}>
-            <Header as='h2' color='blue' textAlign='center'>
-                Log-in to Cookbook
+            <Header as='h1' color='blue' textAlign='center'>
+              <Icon circular name='utensils' color='teal' /> Log-in to Cookbook
             </Header>
             <Form 
               size='large'

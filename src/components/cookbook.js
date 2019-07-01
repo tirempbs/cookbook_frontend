@@ -1,7 +1,8 @@
 import React from 'react';
-import { Grid, Image, Container, Card, Header } from 'semantic-ui-react'
 import { connect } from 'react-redux';
 import withAuth from '../hocs/withAuth';
+import { Container, Segment, Grid, Image, Card, Header, Divider } from 'semantic-ui-react';
+import Nav from './nav';
 
 class Cookbook extends React.Component {
   
@@ -17,24 +18,35 @@ class Cookbook extends React.Component {
       const filteredRecipes = this.filterRecipes()
       return filteredRecipes.map(r=>
         <Grid.Column key={r.id}>
-          <Image src={r.image_url}/>
-          <Card.Content>
-            <Card.Header>{r.title}</Card.Header>
-          </Card.Content>
+          <Card>
+            <Image src={r.image_url}/>
+            <Card.Content>
+              <Card.Header>{r.title}</Card.Header>
+            </Card.Content>
+          </Card>
         </Grid.Column>
+      )
+    } else {
+      return (
+        <Segment padded basic>
+          <h1>Select a cookbook!</h1>
+        </Segment>
       )
     }
   }
 
   render() {
-    console.log(this.props)
     return (
       <>
+        <Nav />
         <Container>
-          <Header as='h1'>{this.props.selectedCookbook.title}</Header>
-          <Grid columns={4}>
-            {this.renderRecipes()}
-          </Grid>
+          <Segment>
+            <Header as='h1'>{this.props.selectedCookbook.title}</Header>
+          <Divider />
+            <Grid columns={4}>
+              {this.renderRecipes()}
+            </Grid>
+          </Segment >
         </Container>
       </>
     )
@@ -51,7 +63,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    
   }
 } 
 

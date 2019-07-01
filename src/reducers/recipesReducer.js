@@ -1,6 +1,7 @@
 const defaultState = {
   recipes: [],
-  selectedRecipes: []
+  selectedRecipes: [],
+  newRecipeId: ''
 }
 
 const recipesReducer = (state = defaultState, action) => {
@@ -8,7 +9,9 @@ const recipesReducer = (state = defaultState, action) => {
     case 'GET_RECIPES':
       return { ...state, recipes: action.payload }
     case 'SET_RECIPES':
-      return { ...state, selectedRecipes: action.payload}
+      return { ...state, selectedRecipes: action.payload }
+    case 'SET_NEW_RECIPE_ID':
+      return { ...state, newRecipeId: action.payload }
     default:
       return state;
   }

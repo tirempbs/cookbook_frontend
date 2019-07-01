@@ -20,3 +20,8 @@ export const setRecipes = (recipeData) => ({
   type: 'SET_RECIPES',
   payload: recipeData
 })
+
+export const setNewRecipeId = (id) => ({
+  type: 'SET_NEW_RECIPE_ID',
+  payload: id
+})

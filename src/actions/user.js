@@ -14,18 +14,18 @@ export const loginUser = (username, password) => {
         }
       })
     })
-    .then(response => {
-      if (response.ok) {
-        return response.json()
-      } else {
-        throw response
-      }
-    })
-    .then(JSONResponse => {
-      localStorage.setItem('jwt', JSONResponse.jwt)
-      dispatch({ type: 'SET_CURRENT_USER', payload: JSONResponse.user })
-    })
-    .catch(r => r.json().then(e => dispatch({ type: 'FAILED_LOGIN', payload: e.message })))
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        } else {
+          throw response
+        }
+      })
+      .then(JSONResponse => {
+        localStorage.setItem('jwt', JSONResponse.jwt)
+        dispatch({ type: 'SET_CURRENT_USER', payload: JSONResponse.user })
+      })
+      .catch(r => r.json().then(e => dispatch({ type: 'FAILED_LOGIN', payload: e.message })))
   }
 }
 

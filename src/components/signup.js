@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Redirect } from 'react-router-dom';
 import { createUser } from '../actions/user';
-import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Message, Segment, Icon } from 'semantic-ui-react';
 
 class Signup extends Component {
   state = { username: '', password: '' }
@@ -30,9 +30,9 @@ class Signup extends Component {
       `}</style>
           <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
             <Grid.Column style={{ maxWidth: 450 }}>
-              <Header as='h2' color='blue' textAlign='center'>
-                Sign Up for Cookbook
-            </Header>
+              <Header as='h1' color='blue' textAlign='center'>
+                <Icon name='utensils' /> Sign Up for Cookbook
+              </Header>
               <Form
                 size='large'
                 onSubmit={this.handleLoginSubmit}
@@ -40,7 +40,7 @@ class Signup extends Component {
                 error={this.props.failedLogin}
               >
                 <Message error header={this.props.failedLogin ? this.props.error : null} />
-                <Segment stacked>
+                <Segment>
                   <Form.Input
                     fluid
                     icon='user'

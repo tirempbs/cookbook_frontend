@@ -18,19 +18,21 @@ const withAuth = (WrappedComponent) => {
       } else if (localStorage.getItem('jwt') && (this.props.authenticatingUser || !this.props.loggedIn)) {
         return <Loader active inline="centered" />
       } else {
-        return <Redirect to="/login" />
+        return <Redirect to='/login' />
       }
     }
   }
 
-  const mapStateToProps = (reduxStoreState) => {
+  const mapStateToProps = (state) => {
     return {
-      loggedIn: reduxStoreState.usersReducer.loggedIn,
-      authenticatingUser: reduxStoreState.usersReducer.authenticatingUser
+      loggedIn: state.usersReducer.loggedIn,
+      authenticatingUser: state.usersReducer.authenticatingUser
     }
   }
 
-  return connect(mapStateToProps, { fetchCurrentUser })(AuthorizedComponent)
+  const mapDispatchToProps = { fetchCurrentUser: fetchCurrentUser }
+
+  return connect(mapStateToProps, mapDispatchToProps)(AuthorizedComponent)
 }
 
 export default withAuth

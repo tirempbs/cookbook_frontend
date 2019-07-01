@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Button, Dropdown } from 'semantic-ui-react';
+import { Menu, Dropdown, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import withAuth from '../hocs/withAuth';
@@ -8,6 +8,11 @@ import { logoutUser, fetchCurrentUser } from '../actions/user';
 import { fetchRecipes } from '../actions/recipe';
 
 class Nav extends React.Component {
+
+  state = { activeItem: '' }
+
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+
   componentDidMount() {
     this.props.fetchCookbooks()
     this.props.fetchCurrentUser()
@@ -27,10 +32,8 @@ class Nav extends React.Component {
     const filteredCookbooks = this.filterCookbooks()
 
     return filteredCookbooks.map(cb =>
-      <Dropdown.Item key={cb.id} onClick={this.handleSelectCookbook}>
-      <Link to='/cookbook'>
-      {cb.title}
-      </Link>
+      <Dropdown.Item key={cb.id} as={Link} to='/cookbook' onClick={this.handleSelectCookbook}>
+        {cb.title}
       </Dropdown.Item>
     )
   }
@@ -42,25 +45,32 @@ class Nav extends React.Component {
   }
 
   render() {
+    const { activeItem } = this.state
     return (
       <>
-        <Menu size='large'>
-          <Dropdown item text='Cookbooks'>
+        <Menu inverted color='blue' borderless>
+          <Menu.Item>
+            <Icon circular inverted name='utensils' color='teal' size='large' />
+          </Menu.Item>
+
+          <Menu.Item as={Link} name='new cookbook' to='/cookbook/new' active={activeItem === 'new cookbook'} onClick={this.handleItemClick}>
+            New Cookbook
+          </Menu.Item>
+
+          <Dropdown item text='Cookbooks' onClick={this.handleItemClick}>
             <Dropdown.Menu>
               {this.renderDropdownItems()}
             </Dropdown.Menu>
           </Dropdown>
 
-          <Menu.Item name='search'>
-            <Link to='/search'>
+          <Menu.Item as={Link} name='search' to='/search' active={activeItem === 'search'} onClick={this.handleItemClick}>
             Search
-            </Link>
           </Menu.Item>
 
           <Menu.Menu position='right'>
-            <Menu.Item>
-              <Button color='blue' onClick={this.handleLogout}>Logout</Button>
-            </Menu.Item>
+
+            <Menu.Item content='Logout' onClick={this.handleLogout} />
+
           </Menu.Menu>
         </Menu>
       </>
